@@ -1,14 +1,14 @@
 package com.example.ishop.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductEntity {
@@ -30,4 +30,7 @@ public class ProductEntity {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "productEntity", orphanRemoval=true)
+    private Set<CartEntity> cartEntities;
 }

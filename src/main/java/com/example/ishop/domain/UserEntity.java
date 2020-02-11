@@ -1,8 +1,6 @@
 package com.example.ishop.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity implements UserDetails {
@@ -25,6 +24,9 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity", orphanRemoval=true)
+    private Set<CartEntity> cartEntities;
 
     @Column(name = "active")
     private boolean active;
