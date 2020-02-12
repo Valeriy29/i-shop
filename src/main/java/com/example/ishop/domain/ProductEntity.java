@@ -13,7 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "jpaSequence", sequenceName = "PRODUCT_SEQUENCE", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
     private Long id;
 
     @Column(name = "product_name", length = 1024)

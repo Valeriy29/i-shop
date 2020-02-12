@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -27,6 +29,45 @@ public class ProductService {
     public ProductService(ProductRepository productRepository, CartRepository cartRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
+    }
+
+    public void removeProduct(Long productId) {
+        productRepository.deleteById(productId);
+    }
+
+    public String addNewProduct(String productName, String description, String image, Double price, Integer quantity) {
+        if (productName == null || description == null || price == null || quantity == null) {
+            return "redirect:/main";
+        }
+        ProductEntity product = new ProductEntity(null, productName, description, image, price, quantity, new HashSet<>());
+        productRepository.save(product);
+        return "redirect:/main";
+    }
+
+    public String updateProduct(Long id, String productName, String description, String image, Double price, Integer quantity) {
+        if (id == null) {
+            return "redirect:/main";
+        }
+        ProductEntity productEntity = productRepository.findById(id).orElse(null);
+        if (productEntity != null) {
+            if (productName != null && !productName.isEmpty()) {
+                productEntity.setProductName(productName);
+            }
+            if (description != null && !description.isEmpty()) {
+                productEntity.setDescription(description);
+            }
+            if (image != null && !image.isEmpty()) {
+                productEntity.setImage(image);
+            }
+            if (price != null) {
+                productEntity.setPrice(price);
+            }
+            if (quantity != null) {
+                productEntity.setQuantity(quantity);
+            }
+            productRepository.save(productEntity);
+        }
+        return  "redirect:/main";
     }
 
     public List<ProductEntity> findAllProducts(Integer currentPage, String currentSort, String productName) {

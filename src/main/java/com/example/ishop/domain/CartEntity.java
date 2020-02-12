@@ -15,7 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class CartEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "jpaSequence", sequenceName = "CART_SEQUENCE", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
     private Long id;
 
     @ManyToOne

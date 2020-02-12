@@ -16,7 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "jpaSequence", sequenceName = "USER_SEQUENCE", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
     private Long id;
 
     @Column(name = "username")
@@ -31,7 +32,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "sort_parem")
+    @Column(name = "sort_param")
     private String sortParam;
 
     @Column(name = "search")

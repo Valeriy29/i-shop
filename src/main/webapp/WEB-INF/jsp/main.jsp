@@ -12,7 +12,9 @@
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <input type="submit" value="Sign Out"/>
     </form>
+    Hello ${username}!
 </div>
+<br>
 <div>Список товаров</div>
 <form action="/main" method="get">
     <input type="text" name="productName" placeholder="Product name">
@@ -22,6 +24,9 @@
 <div>
     <table style="" border="2">
         <tr>
+            <c:if test="${isAdmin}">
+                <th>Id</th>
+            </c:if>
             <th>Product name
                 <div>Sort
                     <a href="main?page=${currentPage}&sort=${"productNameAsc"}">Asc</a>
@@ -41,18 +46,26 @@
         <tbody>
         <c:forEach items="${products}" var="products">
         <tr>
+            <c:if test="${isAdmin}">
+            <td>${products.id}</td>
+            </c:if>
             <td>${products.productName}</td>
             <td>${products.description}</td>
-            <td>${products.image}</td>
+            <td><img src="${products.image}"></td>
             <td>${products.price}</td>
             <td>${products.quantity}</td>
+            <c:if test="${!isAdmin}">
             <td><a href="<c:url value='/addToCart/${products.id}'/>">Add to cart</a></td>
+            </c:if>
+            <c:if test="${isAdmin}">
+            <td><a href="<c:url value='/removeProduct/${products.id}'/>">Remove product</a></td>
+            </c:if>
         <tr>
             </c:forEach>
         </tbody>
     </table>
 </div>
-
+<br>
 <table border="1" cellpadding="5" cellspacing="5">
     <tr>
         <c:if test="${(currentPage != 1) && (currentPage != null)}">
@@ -115,35 +128,61 @@
         </c:if>
     </tr>
 </table>
-<c:if test="${sizeCart != 0}">
-<div>Корзина</div>
-<div>
-    <table style="" border="2">
-        <tr>
-            <th>Product name</th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-        <tbody>
-        <c:forEach items="${productsInCart}" var="productsInCart">
-            <tr>
-                <td>${productsInCart.get("productName")}</td>
-                <td>${productsInCart.get("productDescription")}</td>
-                <td>${productsInCart.get("productImage")}</td>
-                <td>${productsInCart.get("productPrice")}</td>
-                <td>${productsInCart.get("productQuantity")}</td>
-                <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from cart</a>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-</div>
-<form action="<c:url value="/buy"/>">
-    <input type="submit" value="Buy">
-</form>
+<br>
+<c:if test="${!isAdmin}">
+    <c:if test="${sizeCart != 0}">
+        <div>Корзина</div>
+        <div>
+            <table style="" border="2">
+                <tr>
+                    <th>Product name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+                <tbody>
+                <c:forEach items="${productsInCart}" var="productsInCart">
+                    <tr>
+                        <td>${productsInCart.get("productName")}</td>
+                        <td>${productsInCart.get("productDescription")}</td>
+                        <td>${productsInCart.get("productImage")}</td>
+                        <td>${productsInCart.get("productPrice")}</td>
+                        <td>${productsInCart.get("productQuantity")}</td>
+                        <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from cart</a></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <form action="<c:url value="/buy"/>">
+            <input type="submit" value="Buy">
+        </form>
+    </c:if>
+</c:if>
+<c:if test="${isAdmin}">
+    <div>
+        <form action="<c:url value="/update"/>">
+            <input type="number" name="id" placeholder="id*(necessarily)"/>
+            <input type="text" name="productName" placeholder="Product name"/>
+            <input type="text" name="description" placeholder="Description"/>
+            <input type="text" name="image" placeholder="Image"/>
+            <input type="number" name="price" placeholder="Price"/>
+            <input type="number" name="quantity" placeholder="Quantity"/>
+            <button type="submit">Update product</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form action="<c:url value="/add"/>">
+            <input type="text" name="productName" placeholder="Product name"/>
+            <input type="text" name="description" placeholder="Description"/>
+            <input type="text" name="image" placeholder="Image"/>
+            <input type="number" name="price" placeholder="Price"/>
+            <input type="number" name="quantity" placeholder="Quantity"/>
+            <button type="submit">Add product</button>
+        </form>
+    </div>
 </c:if>
 </body>
 </html>
