@@ -1,6 +1,7 @@
 package com.example.ishop.service;
 
 import com.example.ishop.domain.Role;
+import com.example.ishop.domain.SortParam;
 import com.example.ishop.domain.UserEntity;
 import com.example.ishop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class RegistrationService {
         if (loadUser == null) {
             user.setActive(true);
             user.setRoles(Collections.singleton(Role.USER));
+            user.setSortParam(SortParam.NAME_ASC);
             userRepository.save(user);
             return "redirect:/login";
         }

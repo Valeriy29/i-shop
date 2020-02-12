@@ -17,9 +17,11 @@ import java.util.Optional;
 @Repository
 public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
-    List<CartEntity> findAllByUserEntityOrderByIdAsc(UserEntity userEntity, Pageable pageable);
+    List<CartEntity> findAllByUserEntityOrderByIdAsc(UserEntity userEntity);
 
     Optional<CartEntity> findByUserEntityAndProductEntity(UserEntity userEntity, ProductEntity productEntity);
 
     void deleteByProductEntityAndUserEntity(ProductEntity productEntity, UserEntity userEntity);
+
+    void deleteAllByUserEntity(UserEntity userEntity);
 }

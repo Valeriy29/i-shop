@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -37,15 +34,36 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@AuthenticationPrincipal UserEntity user, @RequestParam(required = false) Integer page, Map<String, Object> model) {
-        List<ProductEntity> products = productService.findAllProducts(page);
+    public String main(@AuthenticationPrincipal UserEntity user, @RequestParam(required = false) Integer page,
+                       @RequestParam(required = false) String sort, @RequestParam(required = false) String productName,
+                       Map<String, Object> model) {
+        if (sort != null && !sort.isEmpty()) {
+            user.setSortParam(sort);
+            user = userService.saveUser(user);
+        }
+
+        if (page == null) {
+            user.setSearch(productName);
+            user = userService.saveUser(user);
+        }
+
+        List<ProductEntity> products = productService.findAllProducts(page, user.getSortParam(), user.getSearch());
         List<Map<String, String>> productsInCart = cartService.findAllUserProductsByUser(user);
-        Integer maxPage = productService.getMaxPage();
+        Integer maxPage = productService.getMaxPage(user.getSearch());
         model.put("products", products);
         model.put("productsInCart", productsInCart);
+        model.put("sizeCart", productsInCart.size());
         model.put("currentPage", page);
         model.put("maxPage", maxPage);
+        model.put("currentSort", user.getSortParam());
         return "main";
+    }
+
+    @Transactional
+    @RequestMapping("/buy")
+    public String buy(@AuthenticationPrincipal UserEntity user) {
+        cartService.buyProducts(user);
+        return "redirect:/main";
     }
 
     @RequestMapping("/addToCart/{id}")

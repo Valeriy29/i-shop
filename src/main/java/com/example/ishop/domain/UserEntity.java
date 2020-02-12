@@ -31,6 +31,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "sort_parem")
+    private String sortParam;
+
+    @Column(name = "search")
+    private String search;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

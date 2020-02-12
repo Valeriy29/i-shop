@@ -28,14 +28,16 @@ public class CartService {
     }
 
     public List<CartEntity> findAllUserProducts(UserEntity user) {
-        Pageable pageable = PageRequest.of(0, 10);
-        return cartRepository.findAllByUserEntityOrderByIdAsc(user, pageable);
+        return cartRepository.findAllByUserEntityOrderByIdAsc(user);
+    }
+
+    public void buyProducts(UserEntity user) {
+        cartRepository.deleteAllByUserEntity(user);
     }
 
     public List<Map<String, String>>  findAllUserProductsByUser(UserEntity user) {
         List<Map<String, String>> basketsList = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 10);
-        List<CartEntity> basketEntities = cartRepository.findAllByUserEntityOrderByIdAsc(user, pageable);
+        List<CartEntity> basketEntities = findAllUserProducts(user);
         basketEntities.forEach(basket -> {
             Map<String, String> cartMap = new HashMap<>();
             ProductEntity product = productService.findProductById(basket.getProductEntity().getId());

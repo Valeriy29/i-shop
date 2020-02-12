@@ -2,12 +2,13 @@ package com.example.ishop.service;
 
 import com.example.ishop.domain.CartEntity;
 import com.example.ishop.domain.ProductEntity;
+import com.example.ishop.domain.SortParam;
 import com.example.ishop.domain.UserEntity;
 import com.example.ishop.repository.CartRepository;
 import com.example.ishop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ProductService {
 
     private final static Integer PAGE_SIZE = 10;
     private final static Integer DEFAULT_PAGE = 0;
+    private final static String DEFAULT_SORT = "productName";
 
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
@@ -27,13 +29,44 @@ public class ProductService {
         this.cartRepository = cartRepository;
     }
 
-    public List<ProductEntity> findAllProducts(Integer currentPage) {
-        Integer page = currentPage == null ? DEFAULT_PAGE : currentPage - 1;
-        return productRepository.findByOrderByProductNameAsc(PageRequest.of(page, PAGE_SIZE));
+    public List<ProductEntity> findAllProducts(Integer currentPage, String currentSort, String productName) {
+        int page = currentPage == null ? DEFAULT_PAGE : currentPage - 1;
+        Sort sort;
+        if (currentSort == null) {
+            sort = Sort.by(DEFAULT_SORT).ascending();
+        } else {
+            switch (currentSort) {
+                case SortParam.NAME_ASC:
+                    sort = Sort.by("productName").ascending().and(Sort.by("productName"));
+                    break;
+                case SortParam.NAME_DESC:
+                    sort = Sort.by("productName").descending().and(Sort.by("productName"));
+                    break;
+                case SortParam.PRICE_ASC:
+                    sort = Sort.by("price").ascending().and(Sort.by("productName"));
+                    break;
+                case SortParam.PRICE_DESC:
+                    sort = Sort.by("price").descending().and(Sort.by("productName"));
+                    break;
+                default:
+                    sort = Sort.by(DEFAULT_SORT).ascending().and(Sort.by("productName"));
+            }
+        }
+        if (productName != null && !productName.isEmpty()) {
+            return productRepository.findAllByProductNameContains(productName, PageRequest.of(page, PAGE_SIZE, sort)).getContent();
+        }
+        return productRepository.findAll(PageRequest.of(page, PAGE_SIZE, sort)).getContent();
     }
 
-    public Integer getMaxPage() {
-        int countOfPage = productRepository.getSizeProductsList() / PAGE_SIZE;
+    public Integer getMaxPage(String productName) {
+
+        int countOfPage;
+        if (productName == null || productName.isEmpty()) {
+            countOfPage = productRepository.getSizeProductsList() / PAGE_SIZE;
+        } else {
+            countOfPage = productRepository.getSizeProductsListByProductName(productName) / PAGE_SIZE;
+        }
+
         if (productRepository.getSizeProductsList() % PAGE_SIZE == 0) {
             return countOfPage;
         } else {

@@ -13,29 +13,29 @@
         <input type="submit" value="Sign Out"/>
     </form>
 </div>
-<div>
-    <!--    <form method="post">-->
-    <!--        <input type="text" name="username" placeholder="Введите username"/>-->
-    <!--        <input type="text" name="password" placeholder="Введите password"/>-->
-    <!--        <input type="number" name="age" placeholder="Введите age"/>-->
-    <!--        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
-    <!--        <button type="submit">Добавить</button>-->
-    <!--    </form>-->
-
-</div>
 <div>Список товаров</div>
-<!--<form method="post" action="filter">-->
-<!--    <input type="number" name="age" placeholder="age">-->
-<!--    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
-<!--    <button type="submit">Найти</button>-->
-<!--</form>-->
+<form action="/main" method="get">
+    <input type="text" name="productName" placeholder="Product name">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <button type="submit">Найти</button>
+</form>
 <div>
     <table style="" border="2">
         <tr>
-            <th>Product name</th>
+            <th>Product name
+                <div>Sort
+                    <a href="main?page=${currentPage}&sort=${"productNameAsc"}">Asc</a>
+                    <a href="main?page=${currentPage}&sort=${"productNameDesc"}">Desc</a>
+                </div>
+            </th>
             <th>Description</th>
             <th>Image</th>
-            <th>Price</th>
+            <th>Price
+                <div>Sort
+                    <a href="main?page=${currentPage}&sort=${"priceAsc"}">Asc</a>
+                    <a href="main?page=${currentPage}&sort=${"priceDesc"}">Desc</a>
+                </div>
+            </th>
             <th>Quantity</th>
         </tr>
         <tbody>
@@ -56,24 +56,66 @@
 <table border="1" cellpadding="5" cellspacing="5">
     <tr>
         <c:if test="${(currentPage != 1) && (currentPage != null)}">
-            <td><a href="main?page=${currentPage - 1}">Previous</a></td>
+            <td><a href="main?page=${currentPage - 1}&sort=${sort}">Previous</a></td>
         </c:if>
-        <c:forEach begin="1" end="${maxPage}" var="i">
-            <c:choose>
-                <c:when test="${currentPage eq i}">
-                    <td>${i}</td>
-                </c:when>
-                <c:otherwise>
-                    <td><a href="main?page=${i}">${i}</a></td>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
+        <c:choose>
+            <c:when test="${(currentPage == maxPage) && (maxPage > 5)}">
+                <c:forEach begin="${maxPage - 4}" end="${maxPage}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <td>${i}</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </c:when>
+            <c:when test="${(currentPage >= 5) && (currentPage <= maxPage)}">
+                <c:forEach begin="${1 + (currentPage - 4)}" end="${1 + (currentPage - 4) + 4}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <td>${i}</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <c:if test="${maxPage < 5}">
+                    <c:forEach begin="1" end="${maxPage}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <td>${i}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${maxPage >= 5}">
+                    <c:forEach begin="1" end="5" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <td>${i}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
         <c:if test="${(currentPage lt maxPage) || (currentPage == null)}">
-            <td><a href="main?page=${currentPage + 1}">Next</a></td>
+            <td><a href="main?page=${currentPage + 1}&sort=${sort}">Next</a></td>
         </c:if>
     </tr>
 </table>
-
+<c:if test="${sizeCart != 0}">
 <div>Корзина</div>
 <div>
     <table style="" border="2">
@@ -92,11 +134,16 @@
                 <td>${productsInCart.get("productImage")}</td>
                 <td>${productsInCart.get("productPrice")}</td>
                 <td>${productsInCart.get("productQuantity")}</td>
-                <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from cart</a></td>
+                <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from cart</a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
+<form action="<c:url value="/buy"/>">
+    <input type="submit" value="Buy">
+</form>
+</c:if>
 </body>
 </html>
