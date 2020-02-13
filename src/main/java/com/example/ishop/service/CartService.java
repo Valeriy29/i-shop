@@ -5,9 +5,6 @@ import com.example.ishop.domain.ProductEntity;
 import com.example.ishop.domain.UserEntity;
 import com.example.ishop.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

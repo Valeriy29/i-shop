@@ -6,6 +6,7 @@
 <%@ page session="false" %>
 <html>
 <head>
+    <title>iShop личный кабинет</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -13,14 +14,14 @@
 <div class="container mt-5">
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <button class="btn btn-primary" type="submit"><h5>Sign Out</h5></button>
+        <button class="btn btn-primary" type="submit"><h5>Выход</h5></button>
     </form>
-    <h5>Hello ${username}!</h5>
+    <h5>Приветствуем Вас, ${username}!</h5>
 </div>
 <div class="container mt-5"><h5>Список товаров</h5>
     <form action="/main" method="get">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input type="text" name="productName" placeholder="Product name">
+        <input type="text" name="productName" placeholder="Название товара">
         <button class="btn btn-primary" type="submit">Найти</button>
     </form>
 </div>
@@ -30,21 +31,23 @@
             <c:if test="${isAdmin}">
                 <th>Id</th>
             </c:if>
-            <th>Product name
-                <div>Sort
-                    <a href="main?page=${currentPage}&sort=${"productNameAsc"}">Asc</a>
-                    <a href="main?page=${currentPage}&sort=${"productNameDesc"}">Desc</a>
+            <th>
+                <div>Название товара</div>
+                <div>Отсориторовать:
+                    <div><a href="main?page=${currentPage}&sort=${"productNameAsc"}"><h2>> </h2></a></div>
+                    <div><a href="main?page=${currentPage}&sort=${"productNameDesc"}"><h2>< </h2></a></div>
                 </div>
             </th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Price
-                <div>Sort
-                    <a href="main?page=${currentPage}&sort=${"priceAsc"}">Asc</a>
-                    <a href="main?page=${currentPage}&sort=${"priceDesc"}">Desc</a>
+            <th>Описание</th>
+            <th>Изображение</th>
+            <th>
+                <div>Цена</div>
+                <div>Отсортировать:
+                    <div><a href="main?page=${currentPage}&sort=${"priceAsc"}"><h2>> </h2></a></div>
+                    <div><a href="main?page=${currentPage}&sort=${"priceDesc"}"><h2>< </h2></a></div>
                 </div>
             </th>
-            <th>Quantity</th>
+            <th>Количество в наличии</th>
         </tr>
         <tbody>
         <c:forEach items="${products}" var="products">
@@ -60,7 +63,7 @@
                 <center>${products.quantity}</center>
             </td>
             <c:if test="${!isAdmin}">
-            <td><a href="<c:url value='/addToCart/${products.id}'/>">Add to cart</a></td>
+                <td><a href="<c:url value='/addToCart/${products.id}'/>"><h2>+</h2></a></td>
             </c:if>
             <c:if test="${isAdmin}">
             <td><a href="<c:url value='/removeProduct/${products.id}'/>">Remove product</a></td>
@@ -76,7 +79,7 @@
         <table border="0" cellpadding="5" cellspacing="5">
             <tr>
                 <c:if test="${(currentPage != 1) && (currentPage != null)}">
-                    <td><a href="main?page=${currentPage - 1}&sort=${sort}"><h5>Previous</h5></a></td>
+                    <td><a href="main?page=${currentPage - 1}&sort=${sort}"><h5>Предыдущая</h5></a></td>
                 </c:if>
                 <c:choose>
                     <c:when test="${(currentPage == maxPage) && (maxPage > 5)}">
@@ -131,7 +134,7 @@
                     </c:otherwise>
                 </c:choose>
                 <c:if test="${(currentPage lt maxPage) || (currentPage == null)}">
-                    <td><a href="main?page=${currentPage + 1}&sort=${sort}"><h5>Next</h5></a></td>
+                    <td><a href="main?page=${currentPage + 1}&sort=${sort}"><h5>Следующая</h5></a></td>
                 </c:if>
             </tr>
         </table>
@@ -145,11 +148,11 @@
         <div>
             <table style="" border="0">
                 <tr>
-                    <th>Product name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
+                    <th>Название товара</th>
+                    <th>Описание товара</th>
+                    <th>Изображение</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
                 </tr>
                 <tbody>
                 <c:forEach items="${productsInCart}" var="productsInCart">
@@ -161,8 +164,7 @@
                         <td>
                             <center>${productsInCart.get("productQuantity")}</center>
                         </td>
-                        <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from
-                            cart</a></td>
+                        <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>"><h2>-</h2></a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -171,7 +173,7 @@
         <div class="container mt-3">
             <form action="<c:url value="/buy"/>">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <button class="btn btn-primary" type="submit"><h5>Buy</h5></button>
+                <button class="btn btn-primary" type="submit"><h5>Купить</h5></button>
             </form>
         </div>
         </c:if>
@@ -179,8 +181,7 @@
 </div>
 <c:if test="${isAdmin}">
     <div class="container mt-5>
-        <form action="
-    <c:url value="/update"/>">
+        <form action="<c:url value="/update"/>">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     <input type="number" name="id" placeholder="id*(necessarily)"/>
     <input type="text" name="productName" placeholder="Product name"/>
@@ -193,8 +194,7 @@
     </div>
     <br>
     <div class="container mt-5>
-        <form action="
-    <c:url value="/add"/>">
+        <form action="<c:url value="/add"/>">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     <input type="text" name="productName" placeholder="Product name"/>
     <input type="text" name="description" placeholder="Description"/>

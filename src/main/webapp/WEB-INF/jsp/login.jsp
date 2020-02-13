@@ -8,24 +8,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Spring Security Example </title>
+    <title>iShop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 <div class="container mt-5">
-    <h5>Login page</h5>
+   <h3>Интернет магазин iShop</h3>
+</div>
+<div class="container mt-5">
+    <h5>Страница входа</h5>
     <form action="/login" method="post">
-        <div><label><h5>User Name:</h5><input type="text" name="username"/></label></div>
-        <div><label><h5>Password:</h5><input type="password" name="password"></label></div>
+        <div><label><h5>Логин:</h5><input type="text" name="username"/></label></div>
+        <div><label><h5>Пароль:</h5><input type="password" name="password"></label></div>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <button class="btn btn-primary" type="submit"><h5>Sign In</h5></button>
+        <button class="btn btn-primary" type="submit"><h5>Вход</h5></button>
     </form>
 </div>
 <div class="container mt-5">
     <form action="<c:url value="/registration"/>">
-        <button class="btn btn-primary" type="submit"><h5>Registration</h5></button>
+        <button class="btn btn-primary" type="submit"><h5>Регистрация</h5></button>
     </form>
 </div>
 
