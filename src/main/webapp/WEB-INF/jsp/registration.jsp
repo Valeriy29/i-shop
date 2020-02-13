@@ -25,12 +25,12 @@
             </div>
         </c:if>
         <div><label><h5>Password:</h5><input type="password" name="password"></label></div>
-        <div><label><h5>Password:</h5><input type="password" name="password2"></label></div>
-        <c:if test="${passwordError != null}">
-            <div>
-                    ${passwordError}
-            </div>
-        </c:if>
+<%--        <div><label><h5>Password:</h5><input type="password" name="password2"></label></div>--%>
+<%--        <c:if test="${passwordError != null}">--%>
+<%--            <div>--%>
+<%--                    ${passwordError}--%>
+<%--            </div>--%>
+<%--        </c:if>--%>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button class="btn btn-primary" type="submit"><h5>Registration</h5></button>
     </form>
