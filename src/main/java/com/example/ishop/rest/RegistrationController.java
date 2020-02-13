@@ -29,7 +29,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(@Valid UserEntity userEntity, Map<String, Object> model) {
-        if (userEntity.getPassword() == null ) {
+        if (userEntity.getPassword() == null  || userEntity.getPassword().isEmpty() || userEntity.getUsername() == null  || userEntity.getUsername().isEmpty()) {
             return "registration";
         }
 //    public String addUser(@Valid UserEntity userEntity, BindingResult bindingResult, Model model) {
