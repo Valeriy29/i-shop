@@ -28,7 +28,11 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@Valid UserEntity userEntity, BindingResult bindingResult, Model model) {
+    public String addUser(@Valid UserEntity userEntity, Map<String, Object> model) {
+        if (userEntity.getPassword() == null ) {
+            return "registration";
+        }
+//    public String addUser(@Valid UserEntity userEntity, BindingResult bindingResult, Model model) {
 //        if (userEntity.getPassword() != null && !userEntity.getPassword().equals(userEntity.getPassword2())) {
 //            model.addAttribute("passwordError", "Passwords are different!");
 //            return "registration";
@@ -41,7 +45,7 @@ public class RegistrationController {
 //        }
         String page = registrationService.registrationUser(userEntity);
         if (page.equals("registration")) {
-            model.addAttribute("usernameError", "User exists!");
+            model.put("usernameError", "User exists!");
             return page;
         }
         return page;

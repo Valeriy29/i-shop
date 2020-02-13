@@ -23,11 +23,11 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
     private Long id;
 
-    @NotBlank(message = "Username cannot be empty")
+    //@NotBlank(message = "Username cannot be empty")
     @Column(name = "username")
     private String username;
 
-    @NotBlank(message = "Password cannot be empty")
+    //@NotBlank(message = "Password cannot be empty")
     @Column(name = "password")
     private String password;
 
