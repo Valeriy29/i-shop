@@ -1,6 +1,8 @@
 package com.example.ishop.domain;
 
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,11 +31,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
-    private String password2;
+//        @Transient
+//    @NotBlank(message = "Password confirmation cannot be empty")
+//    private String password2;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity", orphanRemoval=true)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity", orphanRemoval = true)
     private Set<CartEntity> cartEntities;
 
     @Column(name = "active")

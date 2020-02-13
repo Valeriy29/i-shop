@@ -29,16 +29,16 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(@Valid UserEntity userEntity, BindingResult bindingResult, Model model) {
-        if (userEntity.getPassword() != null && !userEntity.getPassword().equals(userEntity.getPassword2())) {
-            model.addAttribute("passwordError", "Passwords are different!");
-            return "registration";
-        }
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
-
-            model.mergeAttributes(errors);
-            return "registration";
-        }
+//        if (userEntity.getPassword() != null && !userEntity.getPassword().equals(userEntity.getPassword2())) {
+//            model.addAttribute("passwordError", "Passwords are different!");
+//            return "registration";
+//        }
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+//
+//            model.mergeAttributes(errors);
+//            return "registration";
+//        }
         String page = registrationService.registrationUser(userEntity);
         if (page.equals("registration")) {
             model.addAttribute("usernameError", "User exists!");

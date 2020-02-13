@@ -1,6 +1,8 @@
 package com.example.ishop.domain;
 
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,6 +34,7 @@ public class ProductEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @NotFound(action = NotFoundAction.IGNORE)
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "productEntity", orphanRemoval=true)
     private Set<CartEntity> cartEntities;
 }
