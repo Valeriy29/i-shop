@@ -5,24 +5,27 @@
 <%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
 <%@ page session="false" %>
 <html>
-
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <body>
-<div>
+<div class="container mt-5">
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input type="submit" value="Sign Out"/>
+        <button class="btn btn-primary" type="submit"><h5>Sign Out</h5></button>
     </form>
-    Hello ${username}!
+    <h5>Hello ${username}!</h5>
 </div>
-<br>
-<div>Список товаров</div>
-<form action="/main" method="get">
-    <input type="text" name="productName" placeholder="Product name">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <button type="submit">Найти</button>
-</form>
-<div>
-    <table style="" border="2">
+<div class="container mt-5"><h5>Список товаров</h5>
+    <form action="/main" method="get">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <input type="text" name="productName" placeholder="Product name">
+        <button class="btn btn-primary" type="submit">Найти</button>
+    </form>
+</div>
+<div class="container mt-5">
+    <table style="" border="0">
         <tr>
             <c:if test="${isAdmin}">
                 <th>Id</th>
@@ -51,9 +54,11 @@
             </c:if>
             <td>${products.productName}</td>
             <td>${products.description}</td>
-            <td><img src="${products.image}"></td>
+            <td><img src="${products.image}" width="310" height="200"></td>
             <td>${products.price}</td>
-            <td>${products.quantity}</td>
+            <td>
+                <center>${products.quantity}</center>
+            </td>
             <c:if test="${!isAdmin}">
             <td><a href="<c:url value='/addToCart/${products.id}'/>">Add to cart</a></td>
             </c:if>
@@ -66,74 +71,79 @@
     </table>
 </div>
 <br>
-<table border="1" cellpadding="5" cellspacing="5">
-    <tr>
-        <c:if test="${(currentPage != 1) && (currentPage != null)}">
-            <td><a href="main?page=${currentPage - 1}&sort=${sort}">Previous</a></td>
-        </c:if>
-        <c:choose>
-            <c:when test="${(currentPage == maxPage) && (maxPage > 5)}">
-                <c:forEach begin="${maxPage - 4}" end="${maxPage}" var="i">
-                    <c:choose>
-                        <c:when test="${currentPage eq i}">
-                            <td>${i}</td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </c:when>
-            <c:when test="${(currentPage >= 5) && (currentPage <= maxPage)}">
-                <c:forEach begin="${1 + (currentPage - 4)}" end="${1 + (currentPage - 4) + 4}" var="i">
-                    <c:choose>
-                        <c:when test="${currentPage eq i}">
-                            <td>${i}</td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <c:if test="${maxPage < 5}">
-                    <c:forEach begin="1" end="${maxPage}" var="i">
-                        <c:choose>
-                            <c:when test="${currentPage eq i}">
-                                <td>${i}</td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+<center>
+    <div class="container mt-2">
+        <table border="0" cellpadding="5" cellspacing="5">
+            <tr>
+                <c:if test="${(currentPage != 1) && (currentPage != null)}">
+                    <td><a href="main?page=${currentPage - 1}&sort=${sort}"><h5>Previous</h5></a></td>
                 </c:if>
-                <c:if test="${maxPage >= 5}">
-                    <c:forEach begin="1" end="5" var="i">
-                        <c:choose>
-                            <c:when test="${currentPage eq i}">
-                                <td>${i}</td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><a href="main?page=${i}&sort=${sort}">${i}</a></td>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+                <c:choose>
+                    <c:when test="${(currentPage == maxPage) && (maxPage > 5)}">
+                        <c:forEach begin="${maxPage - 4}" end="${maxPage}" var="i">
+                            <c:choose>
+                                <c:when test="${currentPage eq i}">
+                                    <td><h5>${i}</h5></td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td><a href="main?page=${i}&sort=${sort}"><h5>${i}</h5></a></td>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </c:when>
+                    <c:when test="${(currentPage >= 5) && (currentPage <= maxPage)}">
+                        <c:forEach begin="${1 + (currentPage - 4)}" end="${1 + (currentPage - 4) + 4}" var="i">
+                            <c:choose>
+                                <c:when test="${currentPage eq i}">
+                                    <td><h5>${i}</h5></td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td><a href="main?page=${i}&sort=${sort}"><h5>${i}</h5></a></td>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${maxPage < 5}">
+                            <c:forEach begin="1" end="${maxPage}" var="i">
+                                <c:choose>
+                                    <c:when test="${currentPage eq i}">
+                                        <td><h5>${i}</h5></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><a href="main?page=${i}&sort=${sort}"><h5>${i}</h5></a></td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${maxPage >= 5}">
+                            <c:forEach begin="1" end="5" var="i">
+                                <c:choose>
+                                    <c:when test="${currentPage eq i}">
+                                        <td><h5>${i}</h5></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><a href="main?page=${i}&sort=${sort}"><h5>${i}</h5></a></td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+                <c:if test="${(currentPage lt maxPage) || (currentPage == null)}">
+                    <td><a href="main?page=${currentPage + 1}&sort=${sort}"><h5>Next</h5></a></td>
                 </c:if>
-            </c:otherwise>
-        </c:choose>
-        <c:if test="${(currentPage lt maxPage) || (currentPage == null)}">
-            <td><a href="main?page=${currentPage + 1}&sort=${sort}">Next</a></td>
-        </c:if>
-    </tr>
-</table>
+            </tr>
+        </table>
+    </div>
+</center>
 <br>
-<c:if test="${!isAdmin}">
+<div class="container mt-5">
+    <c:if test="${!isAdmin}">
     <c:if test="${sizeCart != 0}">
-        <div>Корзина</div>
+    <h5 class="container mt-5"><h4>Корзина</h4>
         <div>
-            <table style="" border="2">
+            <table style="" border="0">
                 <tr>
                     <th>Product name</th>
                     <th>Description</th>
@@ -146,43 +156,63 @@
                     <tr>
                         <td>${productsInCart.get("productName")}</td>
                         <td>${productsInCart.get("productDescription")}</td>
-                        <td>${productsInCart.get("productImage")}</td>
+                        <td><img src="${productsInCart.get("productImage")}" width="310" height="200"></td>
                         <td>${productsInCart.get("productPrice")}</td>
-                        <td>${productsInCart.get("productQuantity")}</td>
-                        <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from cart</a></td>
+                        <td>
+                            <center>${productsInCart.get("productQuantity")}</center>
+                        </td>
+                        <td><a href="<c:url value='/removeFromCart/${productsInCart.get("productId")}'/>">Remove from
+                            cart</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
-        <form action="<c:url value="/buy"/>">
-            <input type="submit" value="Buy">
-        </form>
-    </c:if>
-</c:if>
+        <div class="container mt-3">
+            <form action="<c:url value="/buy"/>">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <button class="btn btn-primary" type="submit"><h5>Buy</h5></button>
+            </form>
+        </div>
+        </c:if>
+        </c:if>
+</div>
 <c:if test="${isAdmin}">
-    <div>
-        <form action="<c:url value="/update"/>">
-            <input type="number" name="id" placeholder="id*(necessarily)"/>
-            <input type="text" name="productName" placeholder="Product name"/>
-            <input type="text" name="description" placeholder="Description"/>
-            <input type="text" name="image" placeholder="Image"/>
-            <input type="number" name="price" placeholder="Price"/>
-            <input type="number" name="quantity" placeholder="Quantity"/>
-            <button type="submit">Update product</button>
-        </form>
+    <div class="container mt-5>
+        <form action="
+    <c:url value="/update"/>">
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+    <input type="number" name="id" placeholder="id*(necessarily)"/>
+    <input type="text" name="productName" placeholder="Product name"/>
+    <input type="text" name="description" placeholder="Description"/>
+    <input type="text" name="image" placeholder="Image"/>
+    <input type="number" name="price" placeholder="Price"/>
+    <input type="number" name="quantity" placeholder="Quantity"/>
+    <button class="btn btn-primary" type="submit">Update product</button>
+    </form>
     </div>
     <br>
-    <div>
-        <form action="<c:url value="/add"/>">
-            <input type="text" name="productName" placeholder="Product name"/>
-            <input type="text" name="description" placeholder="Description"/>
-            <input type="text" name="image" placeholder="Image"/>
-            <input type="number" name="price" placeholder="Price"/>
-            <input type="number" name="quantity" placeholder="Quantity"/>
-            <button type="submit">Add product</button>
-        </form>
+    <div class="container mt-5>
+        <form action="
+    <c:url value="/add"/>">
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+    <input type="text" name="productName" placeholder="Product name"/>
+    <input type="text" name="description" placeholder="Description"/>
+    <input type="text" name="image" placeholder="Image"/>
+    <input type="number" name="price" placeholder="Price"/>
+    <input type="number" name="quantity" placeholder="Quantity"/>
+    <button class="btn btn-primary" type="submit">Add product</button>
+    </form>
     </div>
 </c:if>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 </html>
