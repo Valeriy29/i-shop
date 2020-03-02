@@ -180,8 +180,8 @@
         </c:if>
 </div>
 <c:if test="${isAdmin}">
-    <div class="container mt-5>
-        <form action="<c:url value="/update"/>">
+    <div class="container mt-5">
+    <form action="<c:url value="/update"/>">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     <input type="number" name="id" placeholder="id*(necessarily)"/>
     <input type="text" name="productName" placeholder="Product name"/>
@@ -193,7 +193,7 @@
     </form>
     </div>
     <br>
-    <div class="container mt-5>
+    <div class="container mt-5">
         <form action="<c:url value="/add"/>">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     <input type="text" name="productName" placeholder="Product name"/>
@@ -202,7 +202,7 @@
     <input type="number" name="price" placeholder="Price"/>
     <input type="number" name="quantity" placeholder="Quantity"/>
     <button class="btn btn-primary" type="submit">Add product</button>
-    </form>
+        </form>
     </div>
 </c:if>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
